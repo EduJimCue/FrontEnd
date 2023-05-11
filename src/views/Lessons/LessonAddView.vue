@@ -87,26 +87,21 @@
   }
 },
     methods: {
-  onSubmit(event) {
-    event.preventDefault()
-    fetch("https://localhost:7242/Lesson", {
-      method: `POST`,
-      headers: {
-        "Content-type": "application/json"
-      },
-      body: JSON.stringify(this.form)
-    })
-      .then(response => response.json())
-      .then(data => {
-        console.log(data)
-        this.form.name = ''
-        this.form.teacherId = ''
-        this.form.hour = ''
-        this.form.minute=''
-        this.form.capacity=''
-        this.form.description=''
-        window.location.reload();
+      onSubmit(event) {
+    event.preventDefault();
+    this.$store.dispatch('addLesson', this.form)
+      .then(() => {
+        this.form.name = '';
+        this.form.teacherId = '';
+        this.form.hour = '';
+        this.form.minute = '';
+        this.form.capacity = '';
+        this.form.description = '';
+        this.$router.push(`./`)
       })
+      .catch((error) => {
+        console.error(error);
+      });
   },
   onReset(event) {
     event.preventDefault()

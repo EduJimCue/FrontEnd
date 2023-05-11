@@ -53,7 +53,7 @@ export default {
       this.$router.push(`../Leccion/${item.id}`);
     },
     addRelation() {
-      fetch(`https://localhost:7242/GymLesson/`, {
+      fetch(`http://localhost:6376/GymLesson/PostGymLesson`, {
         method: "POST",
         headers: {
           "Content-type": "application/json"
@@ -79,17 +79,17 @@ export default {
     }
   },
   created() {
-    fetch(`https://localhost:7242/Gym/${this.$route.params.id}`)
+    fetch(`http://localhost:6376/Gym/GetIdGym/${this.$route.params.id}`)
       .then(response => response.json())
       .then(response => {
         this.Gym = response;
       });
 
-    fetch(`https://localhost:7242/GymLesson/${this.$route.params.id}`)
+    fetch(`http://localhost:6376/GymLesson/GetGymLessonId/${this.$route.params.id}`)
       .then(response => response.json())
       .then(response => {
         const lessonPromises = response.map(lesson => {
-          return fetch(`https://localhost:7242/User/${lesson.teacherId}`)
+          return fetch(`http://localhost:6376/User/GetUserId/${lesson.teacherId}`)
             .then(response => response.json())
             .then(response => {
               lesson.teacherName = response.name;

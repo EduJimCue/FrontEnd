@@ -1,11 +1,11 @@
 <template>
   <div id="app">
-    <nav>
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link> |
-      <router-link to="/Gimnasio">Gimnasios</router-link> |
-      <router-link to="/Leccion">Lecciones</router-link> |
-      <span v-if="$store.state.user!=null">
+    <header>
+      <div>
+        Logo
+      </div>
+      <div>
+       <span v-if="$store.state.user!=null">
       <button @click="$store.dispatch('logout')">Cerrar sesión</button> |
       <button @click="editUser">Actualiza tu usuario</button> |
       <button @click="deleteUser">Eliminar usuario</button> |
@@ -14,23 +14,25 @@
         <router-link to="/Login">Inicia sesion</router-link> |
         <router-link to="/Signup">Registrate</router-link> |
       </span>
+    </div>
+    </header>
+    <nav>
+      <router-link to="/">Home</router-link> |
+      <router-link to="/about">About</router-link> |
+      <router-link to="/Gimnasio">Gimnasios</router-link> |
+      <router-link to="/Leccion">Lecciones</router-link> |
     </nav>
     <router-view/>
+    <footer>
+      <p>Aqui irian las redes sociales</p>
+    </footer>
   </div>
 </template>
 <script>
 export default{
   methods:{
   deleteUser() {
-    fetch(`https://localhost:7242/User/${this.$store.state.user.id}`, {
-      method: `DELETE`,
-      headers: {
-      "Content-type": "application/json"
-      }
-      }).then(() => {
-      window.location.reload();
-      this.$store.dispatch('logout');
-    });
+    this.$store.dispatch('deleteLesson')
   },
   editUser(){
     this.$router.push(`User/${this.$store.state.user.id}/edit`)
@@ -55,6 +57,7 @@ export default{
 
 nav {
   padding: 30px;
+  text-align: left;
 
   a {
     font-weight: bold;
@@ -64,5 +67,23 @@ nav {
       color: #42b983;
     }
   }
+}
+header{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  background-color: #42b983;
+  color:white;
+}
+footer{
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: #42b983;
+  padding: 20px;
+  color: #fff;
+  text-align: center;
 }
 </style>

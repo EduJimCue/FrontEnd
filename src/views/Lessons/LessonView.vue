@@ -37,7 +37,7 @@ export default {
     const lessonId = parseInt(this.$route.params.id);
     const userLesson = { usuarioId: userId, leccionId: lessonId };
 
-    fetch("https://localhost:7242/UserLesson", {
+    fetch("http://localhost:6376/UserLesson/PostUserLesson", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(userLesson)
@@ -45,7 +45,7 @@ export default {
     .then(response => {
       if (response.ok) {
         this.registeredUsers += 1;
-        fetch(`https://localhost:7242/LessonUser/${lessonId}`)
+        fetch(`http://localhost:6376/GetLessonUser/${lessonId}`)
           .then(response => response.json())
           .then(response => {
             this.Users = response;
@@ -59,27 +59,23 @@ export default {
     });
   },
   deleteUser() {
-    const userId = parseInt(this.$store.state.user.id);
-    const lessonId = parseInt(this.$route.params.id);
-    fetch(`https://localhost:7242/UserLesson/${userId}/${lessonId}`, {
-      method: "DELETE"
+  const userId = parseInt(this.$store.state.user.id);
+  const lessonId = parseInt(this.$route.params.id);
+  fetch(`http://localhost:6376/UserLesson/DeleteUserLesson/${userId}/${lessonId}`, {
+    method: "DELETE"
+  })
+    .then(response => {
+      if (response.ok) {
+        this.registeredUsers -= 1;
+        this.Users = this.Users.filter(user => user.usuarioId !== userId);
+      } else {
+        alert("Error al eliminar el registro.");
+      }
     })
-      .then(response => {
-        if (response.ok) {
-          this.registeredUsers -= 1;
-          fetch(`https://localhost:7242/LessonUser/${lessonId}`)
-            .then(response => response.json())
-            .then(response => {
-              this.Users = response;
-            });
-        } else {
-          alert("Error al eliminar el registro.");
-        }
-      })
-      .catch(error => {
-        console.error("Error al eliminar el registro", error);
-      });
-  }
+    .catch(error => {
+      console.error("Error al eliminar el registro", error);
+    });
+}
 },
   computed: {
     remainingCapacity() {
@@ -95,14 +91,14 @@ export default {
 }
   },
   created() {
-    fetch(`https://localhost:7242/Lesson/${this.$route.params.id}`)
+    fetch(`http://localhost:6376/Lesson/GetLessonId/${this.$route.params.id}`)
       .then(response => response.json())
       .then(response => {
         this.Lesson = response;
         this.initialCapacity = response.capacity; 
         this.loading = false; 
       });
-    fetch(`https://localhost:7242/LessonUser/${this.$route.params.id}`)
+    fetch(`http://localhost:6376/GetLessonUser/${this.$route.params.id}`)
       .then(response => response.json())
       .then(response => {
         this.registeredUsers = response.length;

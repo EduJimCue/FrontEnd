@@ -4,7 +4,7 @@
     <div v-if="$store.state.user!=null">
     <h2>¡Bienvenido de vuelta, {{ $store.state.user.name }}!</h2> 
     <h3>Estas son las lecciones a las que estas apuntado:</h3>
-    <b-table striped hover :items="lessons" :fields="fields" @row-clicked="showLessonDetails"></b-table>
+    <b-table striped hover :items="$store.state.userlessons" :fields="fields" @row-clicked="showLessonDetails"></b-table>
   </div>
   <div v-else>
     <h1> Por favor, inicie sesión para ver tus detalles</h1>
@@ -18,7 +18,6 @@ export default {
   data() {
     return {
       fields: ['name', 'description', 'teacherId'],
-      lessons: []
     };
   },
   methods:{
@@ -29,12 +28,7 @@ export default {
   components: {
   },
   created() {
-    fetch(`https://localhost:7242/Userlesson/${this.$store.state.user.id}`)
-      .then(response => response.json())
-      .then(response => {
-        this.lessons = response;
-        console.log(this.$store.state.user.id)
-      });
+    this.$store.dispatch('fetchUserLessons');
   }
 }
 </script>

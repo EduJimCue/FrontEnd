@@ -3,9 +3,14 @@
     <h1>Listado de lecciones</h1>
     <div v-if="$store.state.auth">
       <button class="btn btn-warning" @click="addLesson()">Añadir leccion</button>
-      <b-form-group label="Buscar">
-        <b-form-input v-model="search" @input="filterLessons"></b-form-input>
-      </b-form-group>
+      <v-form  grid="true" style="max-width: 600px; margin: 0 auto;">
+        <v-text-field
+        v-model="search"
+        label="Buscar"
+        @input="filterLessons"
+        >
+        </v-text-field>
+      </v-form>
       <b-table striped hover :items="filteredLessons" :fields="authFields" @row-clicked="showLessonDetails">
         <template v-if="$store.state.auth" #cell(edit)="data">
           <button class="btn btn-primary" @click="editLesson(data.item)">Editar</button>
@@ -14,9 +19,14 @@
       </b-table>
     </div>
     <div v-else>
-      <b-form-group label="Buscar">
-        <b-form-input v-model="search" @input="filterLessons"></b-form-input>
-      </b-form-group>
+      <v-form  grid="true" style="max-width: 600px; margin: 0 auto;">
+        <v-text-field
+        v-model="search"
+        label="Buscar"
+        @input="filterLessons"
+        >
+        </v-text-field>
+      </v-form>
       <b-table striped hover :items="filteredLessons" :fields="fields" @row-clicked="showLessonDetails"></b-table>
     </div>
   </div>
@@ -56,14 +66,7 @@ export default {
       this.$router.push(`Leccion/${item.id}/edit`);
     },
     deleteLesson(item) {
-      fetch(`https://localhost:7242/Lesson/${item.id}`, {
-        method: `DELETE`,
-        headers: {
-          "Content-type": "application/json"
-        }
-      }).then(function() {
-        window.location.reload();
-      });
+      this.$store.dispatch('deleteLesson',item);
     },
     filterLessons() {
     }

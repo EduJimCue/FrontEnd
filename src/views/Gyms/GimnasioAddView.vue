@@ -62,21 +62,14 @@
     methods: {
   onSubmit(event) {
     event.preventDefault()
-    fetch("https://localhost:7242/Gym", {
-      method: `POST`,
-      headers: {
-        "Content-type": "application/json"
-      },
-      body: JSON.stringify(this.form)
-    })
-      .then(response => response.json())
+    this.$store.dispatch('addGym', this.form)
       .then(data => {
         console.log(data)
         this.form.name = ''
         this.form.address = ''
         this.form.monthPrice = ''
         this.form.description=''
-        window.location.reload();
+        this.$router.push(`./`)
       })
   },
   onReset(event) {

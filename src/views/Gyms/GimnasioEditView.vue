@@ -66,58 +66,27 @@
     data() {
       return {
         form: {
-          id : this.$route.params.id,
-          name: '',
-          address: '',
-          monthPrice: '',
-          description: '',
-          signUpDate: new Date().toISOString(),
         },
         gymId: null,
         loading: true,
       };
     },
     methods: {
-      fetchGymData() {
-        fetch(`https://localhost:7242/Gym/${this.gymId}`)
-          .then((response) => response.json())
-          .then((data) => {
-            this.form.name = data.name;
-            this.form.address = data.address;
-            this.form.monthPrice = data.monthPrice;
-            this.form.description = data.description;
-            this.loading = false;
-          });
-      },
       onSubmit(event) {
         event.preventDefault();
-        fetch(`https://localhost:7242/Gym`, {
-          method: `PUT`,
-          headers: {
-            "Content-type": "application/json",
-          },
-          body: JSON.stringify(this.form),
-        })
-          .then((response) => response.json())
-          .then((data) => {
-            console.log(data)
-            this.form.name = '';
-            this.form.address = '';
-            this.form.monthPrice = '';
-            this.form.description = '';
-          });
+        this.$store.dispatch('actualizeGym', this.form)
+        this.$router.push('/Gimnasio')
       },
       onReset(event) {
         event.preventDefault();
-        this.form.name = '';
-        this.form.address = '';
-        this.form.monthPrice = '';
-        this.form.description = '';
+        this.form = {...this.$store.state.formGym}
       },
     },
     created() {
       this.gymId = this.$route.params.id;
-      this.fetchGymData();
+      this.$store.dispatch('fetchGymById', this.gymId).then(() => {
+      this.form = {...this.$store.state.formGym}
+    });
     },
   }
 </script>

@@ -70,13 +70,6 @@
     data() {
       return {
         form: {
-          id : this.$route.params.id,
-          name: '',
-          teacherId: '',
-          hour: '',
-          minute:'',
-          capacity:'',
-          description: ''
         },
         lessonId: null,
       };
@@ -90,51 +83,21 @@
   }
 },
     methods: {
-      fetchLessonData() {
-        fetch(`https://localhost:7242/Lesson/${this.lessonId}`)
-          .then((response) => response.json())
-          .then((data) => {
-            this.form.name = data.name;
-            this.form.teacherId = data.teacherId;
-            this.form.hour = data.hour;
-            this.form.minute = data.minute;
-            this.form.capacity= data.capacity;
-            this.form.description = data.description;
-          });
-      },
       onSubmit(event) {
         event.preventDefault();
-        fetch(`https://localhost:7242/Lesson`, {
-          method: `PUT`,
-          headers: {
-            "Content-type": "application/json",
-          },
-          body: JSON.stringify(this.form),
-        })
-          .then((response) => response.json())
-          .then((data) => {
-            console.log(data)
-            this.form.name = '';
-            this.form.teacherId = '';
-            this.form.hour = '';
-            this.form.minute = '';
-            this.form.capacity = '';
-            this.form.description = '';
-          });
+          this.$store.dispatch('actualizeLesson', this.form)
+          this.$router.push(`/Leccion`)
       },
       onReset(event) {
         event.preventDefault();
-        this.form.name = '';
-            this.form.teacherId = '';
-            this.form.hour = '';
-            this.form.minute = '';
-            this.form.capacity = '';
-            this.form.description = '';
+        this.form = {...this.$store.state.formLesson}
       },
     },
     created() {
       this.lessonId = this.$route.params.id;
-      this.fetchLessonData();
+      this.$store.dispatch('fetchLessonById', this.lessonId).then(() => {
+      this.form = {...this.$store.state.formLesson}
+    });
     },
   }
 </script>

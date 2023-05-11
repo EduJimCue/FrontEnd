@@ -52,7 +52,7 @@
       }
     },
     methods: {
-      onSubmit(event) {
+    onSubmit(event) {
   event.preventDefault()
   const formToSend = {
     id:this.$store.state.user.id,
@@ -63,32 +63,14 @@
     admin: !!this.form.admin,
     signUpDate: new Date().toISOString()
   }
-  fetch(`https://localhost:7242/User/`, {
-    method: 'PUT',
-    headers: {
-      'Content-type': 'application/json'
-    },
-    body: JSON.stringify(formToSend)
-  })
-    .then(response => response.json())
-    .catch(error => console.error(error))
-    .then(data => {
-      this.logOut()
-      console.log(data)
-      this.form.name = ''
-      this.form.username = ''
-      this.form.password = ''
-      
-    })
-},
-logOut(){
-  this.$store.dispatch('logout')
+  this.$store.dispatch('actualizeUser', formToSend)
+  this.$router.push(`/`)
 },
   onReset(event) {
     event.preventDefault()
-    this.form.name = ''
-    this.form.username = ''
-    this.form.password=''
+    this.form.name = this.$store.state.user.name,
+    this.form.username = this.$store.state.user.username,
+    this.form.password=this.$store.state.user.password
   }
 }
   }

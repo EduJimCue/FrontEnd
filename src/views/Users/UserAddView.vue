@@ -62,21 +62,8 @@
     admin: !!this.form.admin,
     signUpDate: new Date().toISOString()
   }
-  fetch("https://localhost:7242/User", {
-    method: `POST`,
-    headers: {
-      "Content-type": "application/json"
-    },
-    body: JSON.stringify(formToSend)
-  })
-    .then(response => response.json())
-    .then(data => {
-      console.log(data)
-      this.form.name = ''
-      this.form.username = ''
-      this.form.password = ''
-      window.location.reload();
-    })
+  this.$store.dispatch('addUser', formToSend)
+  this.$router.push(`./`)
 },
   onReset(event) {
     event.preventDefault()

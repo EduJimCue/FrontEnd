@@ -5,7 +5,7 @@
 
     <div>
       <label for="search">Buscar:</label>
-      <input id="search" v-model="searchTerm" type="text" placeholder="Ingrese el nombre del gimnasio">
+      <input id="search" v-model="searchTerm" type="text" style="width: 400px;" placeholder="Ingrese el nombre del gimnasio">
     </div>
 
     <b-table striped hover :items="filteredGyms" :fields="authFields" @row-clicked="showGymDetails">
@@ -68,14 +68,7 @@ export default {
     },
 
     deleteGym(item) {
-      fetch(`https://localhost:7242/Gym/${item.id}`, {
-        method: `DELETE`,
-        headers: {
-          'Content-type': 'application/json',
-        },
-      }).then(() => {
-        window.location.reload();
-      });
+      this.$store.dispatch('deleteGym',item);
     },
   },
 
